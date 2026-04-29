@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Новый счёт{% endblock %}
+
+{% block content %}
+<h1>Новый счёт</h1>
+<form method="post" class="form">
+    <label>Название <input type="text" name="name" required></label>
+    <label>Начальный баланс <input type="text" name="balance" value="0"></label>
+    <button class="btn" type="submit">Сохранить</button>
+    <a href="{{ url_for('accounts.list_view') }}">Отмена</a>
+</form>
+{% endblock %}

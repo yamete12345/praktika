@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Новый контрагент{% endblock %}
+
+{% block content %}
+<h1>Новый контрагент</h1>
+<form method="post" class="form">
+    <label>Название <input type="text" name="name" required></label>
+    <label>Тип
+        <select name="type">
+            <option value="client">Клиент</option>
+            <option value="supplier">Поставщик</option>
+        </select>
+    </label>
+    <label>ИНН <input type="text" name="inn"></label>
+    <label>Контакт <input type="text" name="contact"></label>
+    <button class="btn" type="submit">Сохранить</button>
+    <a href="{{ url_for('counterparties.list_view') }}">Отмена</a>
+</form>
+{% endblock %}

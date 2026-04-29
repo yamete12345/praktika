@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Главная — Финансы компании{% endblock %}
+
+{% block content %}
+<h1>Сводка за {{ year }} год</h1>
+
+<div class="cards">
+    <div class="card"><h3>Доходы</h3><p class="big">{{ "%.2f"|format(income) }} ₽</p></div>
+    <div class="card"><h3>Расходы</h3><p class="big">{{ "%.2f"|format(expense) }} ₽</p></div>
+    <div class="card"><h3>Прибыль</h3><p class="big">{{ "%.2f"|format(profit) }} ₽</p></div>
+</div>
+
+<h2>Счета</h2>
+<table>
+    <tr><th>Название</th><th>Баланс</th></tr>
+    {% for a in accounts %}
+        <tr><td>{{ a.name }}</td><td>{{ "%.2f"|format(a.balance) }} ₽</td></tr>
+    {% endfor %}
+</table>
+
+<h2>Помесячная динамика</h2>
+<canvas id="trend" width="800" height="300"></canvas>
+
+<h2>Последние транзакции</h2>
+<table>
+    <tr><th>Дата</th><th>Тип</th><th>Сумма</th><th>Категория</th><th>Счёт</th><th>Описание</th></tr>
+    {% for t in recent %}
+        <tr>
+            <td>{{ t.date }}</td>
+            <td>{{ "Доход" if t.type.value == "income" else "Расход" }}</td>
+            <td>{{ "%.2f"|format(t.amount) }}</td>
+            <td>{{ t.category.name }}</td>
+            <td>{{ t.account.name }}</td>
+            <td>{{ t.description or "" }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const data = {{ monthly | tojson }};
+    new Chart(document.getElementById('trend'), {
+        type: 'bar',
+        data: {
+            labels: data.map(d => d.month),
+            datasets: [
+                { label: 'Доход', data: data.map(d => d.income), backgroundColor: 'rgba(40,167,69,0.6)' },
+                { label: 'Расход', data: data.map(d => d.expense), backgroundColor: 'rgba(220,53,69,0.6)' },
+            ]
+        }
+    });
+</script>
+{% endblock %}

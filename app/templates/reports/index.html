@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Отчёты{% endblock %}
+
+{% block content %}
+<h1>Отчёты</h1>
+
+<form method="get" class="form-inline">
+    <label>С <input type="date" name="date_from" value="{{ date_from or '' }}"></label>
+    <label>По <input type="date" name="date_to" value="{{ date_to or '' }}"></label>
+    <button class="btn" type="submit">Применить</button>
+</form>
+
+<div class="cards">
+    <div class="card"><h3>Доходы</h3><p class="big">{{ "%.2f"|format(income) }} ₽</p></div>
+    <div class="card"><h3>Расходы</h3><p class="big">{{ "%.2f"|format(expense) }} ₽</p></div>
+    <div class="card"><h3>Прибыль</h3><p class="big">{{ "%.2f"|format(profit) }} ₽</p></div>
+</div>
+
+<h2>Доходы по категориям</h2>
+<table>
+    <tr><th>Категория</th><th>Сумма</th></tr>
+    {% for row in income_by_cat %}
+        <tr><td>{{ row.category }}</td><td>{{ "%.2f"|format(row.total) }}</td></tr>
+    {% endfor %}
+</table>
+
+<h2>Расходы по категориям</h2>
+<canvas id="expenseChart" width="600" height="300"></canvas>
+<table>
+    <tr><th>Категория</th><th>Сумма</th></tr>
+    {% for row in expense_by_cat %}
+        <tr><td>{{ row.category }}</td><td>{{ "%.2f"|format(row.total) }}</td></tr>
+    {% endfor %}
+</table>
+
+<h2>По отделам</h2>
+<table>
+    <tr><th>Отдел</th><th>Доходы</th><th>Расходы</th><th>Прибыль</th></tr>
+    {% for row in by_department %}
+        <tr>
+            <td>{{ row.department }}</td>
+            <td>{{ "%.2f"|format(row.income) }}</td>
+            <td>{{ "%.2f"|format(row.expense) }}</td>
+            <td>{{ "%.2f"|format(row.profit) }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const expData = {{ expense_by_cat | tojson }};
+    new Chart(document.getElementById('expenseChart'), {
+        type: 'pie',
+        data: {
+            labels: expData.map(d => d.category),
+            datasets: [{ data: expData.map(d => d.total) }]
+        }
+    });
+</script>
+{% endblock %}

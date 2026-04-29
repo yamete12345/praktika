@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Новая категория{% endblock %}
+
+{% block content %}
+<h1>Новая категория</h1>
+<form method="post" class="form">
+    <label>Название <input type="text" name="name" required></label>
+    <label>Тип
+        <select name="type">
+            <option value="income">Доход</option>
+            <option value="expense">Расход</option>
+        </select>
+    </label>
+    <button class="btn" type="submit">Сохранить</button>
+    <a href="{{ url_for('categories.list_view') }}">Отмена</a>
+</form>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Новая транзакция{% endblock %}
+
+{% block content %}
+<h1>Новая транзакция</h1>
+
+<form method="post" class="form">
+    <label>Тип
+        <select name="type" required>
+            <option value="income">Доход</option>
+            <option value="expense">Расход</option>
+        </select>
+    </label>
+
+    <label>Сумма
+        <input type="text" name="amount" required>
+    </label>
+
+    <label>Дата
+        <input type="date" name="date" required value="{{ ''|safe }}">
+    </label>
+
+    <label>Категория
+        <select name="category_id" required>
+            {% for c in categories %}
+                <option value="{{ c.id }}">{{ c.name }} ({{ c.type.value }})</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>Счёт
+        <select name="account_id" required>
+            {% for a in accounts %}
+                <option value="{{ a.id }}">{{ a.name }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>Отдел
+        <select name="department_id">
+            <option value="">—</option>
+            {% for d in departments %}
+                <option value="{{ d.id }}">{{ d.name }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>Контрагент
+        <select name="counterparty_id">
+            <option value="">—</option>
+            {% for cp in counterparties %}
+                <option value="{{ cp.id }}">{{ cp.name }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>Описание
+        <input type="text" name="description">
+    </label>
+
+    <button class="btn" type="submit">Сохранить</button>
+    <a href="{{ url_for('transactions.list_view') }}">Отмена</a>
+</form>
+{% endblock %}

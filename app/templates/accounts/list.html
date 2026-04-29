@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Счета{% endblock %}
+
+{% block content %}
+<h1>Счета</h1>
+<a class="btn" href="{{ url_for('accounts.create') }}">+ Добавить</a>
+<table>
+    <tr><th>Название</th><th>Баланс</th><th></th></tr>
+    {% for a in accounts %}
+    <tr>
+        <td>{{ a.name }}</td>
+        <td>{{ "%.2f"|format(a.balance) }} ₽</td>
+        <td>
+            <form method="post" action="{{ url_for('accounts.delete', account_id=a.id) }}"
+                  onsubmit="return confirm('Удалить?')">
+                <button class="btn-danger">×</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

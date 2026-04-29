@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Контрагенты{% endblock %}
+
+{% block content %}
+<h1>Контрагенты</h1>
+<a class="btn" href="{{ url_for('counterparties.create') }}">+ Добавить</a>
+<table>
+    <tr><th>Название</th><th>Тип</th><th>ИНН</th><th>Контакт</th><th></th></tr>
+    {% for cp in counterparties %}
+    <tr>
+        <td>{{ cp.name }}</td>
+        <td>{{ "Клиент" if cp.type.value == "client" else "Поставщик" }}</td>
+        <td>{{ cp.inn or "" }}</td>
+        <td>{{ cp.contact or "" }}</td>
+        <td>
+            <form method="post" action="{{ url_for('counterparties.delete', counterparty_id=cp.id) }}"
+                  onsubmit="return confirm('Удалить?')">
+                <button class="btn-danger">×</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

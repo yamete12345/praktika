@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Новый отдел{% endblock %}
+
+{% block content %}
+<h1>Новый отдел</h1>
+<form method="post" class="form">
+    <label>Название <input type="text" name="name" required></label>
+    <label>Описание <input type="text" name="description"></label>
+    <button class="btn" type="submit">Сохранить</button>
+    <a href="{{ url_for('departments.list_view') }}">Отмена</a>
+</form>
+{% endblock %}

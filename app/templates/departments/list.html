@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Отделы{% endblock %}
+
+{% block content %}
+<h1>Отделы</h1>
+<a class="btn" href="{{ url_for('departments.create') }}">+ Добавить</a>
+<table>
+    <tr><th>Название</th><th>Описание</th><th></th></tr>
+    {% for d in departments %}
+    <tr>
+        <td>{{ d.name }}</td>
+        <td>{{ d.description or "" }}</td>
+        <td>
+            <form method="post" action="{{ url_for('departments.delete', department_id=d.id) }}"
+                  onsubmit="return confirm('Удалить?')">
+                <button class="btn-danger">×</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
